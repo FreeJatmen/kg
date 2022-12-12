@@ -250,14 +250,12 @@ namespace Lab1_kg_
                             arrRSum = arrRSum + arrR[i + x, j + y];
                             arrGSum = arrGSum + arrG[i + x, j + y];
                             arrBSum = arrBSum + arrB[i + x, j + y];
-
                         }
                     }
                     arrsrR = arrRSum / 9;
                     arrsrG = arrGSum / 9;
                     arrsrB = arrBSum / 9;
                     image2.SetPixel(i, j, Color.FromArgb(arrsrR, arrsrG, arrsrB));
-
                 }
             }
 
@@ -295,13 +293,13 @@ namespace Lab1_kg_
 
             byte[] noise = new byte[bytes];
             double[] erlang = new double[256];
-            double a = 2;
+            double a = 1;
             Random rnd = new Random();
             double sum = 0;
 
             for (int i = 0; i < 256; i++)
             {
-                double step = (double)i * 0.01;
+                double step = (double)i * 0.009;
                 if (step >= 0)
                 {
                     erlang[i] = (double)(a * Math.Exp(-a * step));
@@ -413,34 +411,7 @@ namespace Lab1_kg_
         }
 
 
-        private static void hist (Bitmap image){
-            Bitmap bmp = new Bitmap(image);
-            int[] histogram_r = new int[256];
-            float max = 0;
-
-            int[] hist = new int[256];
-
-            for (int y = 0; y < image.Height; y++)
-                for (int x = 0; x < image.Width; x++)
-                {
-                    Color color = image.GetPixel(x, y);
-                    hist[color.R]++;
-                }
-
-            int histHeight = 128;
-            Bitmap img = new Bitmap(256, histHeight + 10);
-            using (Graphics g = Graphics.FromImage(img))
-            {
-                for (int i = 0; i < hist.Length; i++)
-                {
-                    float pct = hist[i] / max;   // What percentage of the max is this value?
-                    g.DrawLine(Pens.Black,
-                        new Point(i, img.Height - 5),
-                        new Point(i, img.Height - 5 - (int)(pct * histHeight))  // Use that percentage of the height
-                        );
-                }
-            }
-        }
+        
 
         
 
@@ -467,16 +438,148 @@ namespace Lab1_kg_
             {
                 for (int i = 0; i < histogram_r.Length; i++)
                 {
-                    float pct = histogram_r[i] / max;   // What percentage of the max is this value?
+                    float pct = histogram_r[i] / max;   
                     g.DrawLine(Pens.Black,
                         new Point(i, img.Height - 5),
-                        new Point(i, img.Height - 5 - (int)(pct * histHeight))  // Use that percentage of the height
+                        new Point(i, img.Height - 5 - (int)(pct * histHeight))  
                         );
                 }
             }
             pictureBox2.Image = img;
-            //img.Save(@"c:\temp\test.jpg");
-            //pictureBox1.Image = 
+           
+        }
+
+        private void lawsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            prevImage = new Bitmap(pictureBox1.Image);
+            Laws frame = new Laws(prevImage);
+            frame.Show();
+        }
+
+        private void rToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            prevImage = new Bitmap(pictureBox1.Image);
+            Cursor.Current = Cursors.WaitCursor;
+            var g = new RegionPaint();
+            this.pictureBox1.Image = g.Compute((Bitmap)pictureBox1.Image);
+            Cursor.Current = Cursors.Default;
+        }
+
+        private void кореляцияToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int Radius = 3;
+            Bitmap startimage = Tools.Gray(new Bitmap(pictureBox1.Image));
+            int[,] image = Tools.IntensivityMatrix(startimage);
+
+            float[,] resimagef = new float[image.GetLength(0), image.GetLength(1)];
+
+            Bitmap resimage = new Bitmap(startimage);
+
+            for (uint i = 0; i < resimagef.GetLength(0); i++)
+                for (uint j = 0; j < resimagef.GetLength(1); j++)
+                {
+                    int[,] part = Tools.MatrixPart(image, (uint)Radius, i, j);
+                    int[,] g = GLCM.DiagonalGLCM(part);
+                    resimagef[i, j] = GLCM.Correlation(g, GLCM.CountPair(part.GetLength(0), part.GetLength(1), GLCM.GLCMType.Diagonal));
+                }
+
+            float min = resimagef[0, 0];
+            float max = resimagef[0, 0];
+
+            for (int i = 0; i < resimagef.GetLength(0); i++)
+                for (int j = 0; j < resimagef.GetLength(1); j++)
+                {
+                    if (resimagef[i, j] > max) max = resimagef[i, j];
+                    if (resimagef[i, j] < min) min = resimagef[i, j];
+                }
+
+            for (int i = 0; i < resimagef.GetLength(0); i++)
+                for (int j = 0; j < resimagef.GetLength(1); j++)
+                {
+
+
+                    int intensivity = (int)((resimagef[i, j] - min) * 255 / (max - min));
+                    resimage.SetPixel(i, j, Color.FromArgb(intensivity, intensivity, intensivity));
+
+                }
+
+            pictureBox3.Image = resimage;
+        }
+
+        private void aSMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int Radius = 3;
+            Bitmap startimage = Tools.Gray(new Bitmap(pictureBox1.Image));
+            int[,] image = Tools.IntensivityMatrix(startimage);
+
+            float[,] resimagef = new float[image.GetLength(0), image.GetLength(1)];
+
+            Bitmap resimage = new Bitmap(startimage);
+
+            for (uint i = 0; i < resimagef.GetLength(0); i++)
+                for (uint j = 0; j < resimagef.GetLength(1); j++)
+                {
+                    int[,] part = Tools.MatrixPart(image, (uint)Radius, i, j);
+                    int[,] g = GLCM.DiagonalGLCM(part);
+                    resimagef[i, j] = GLCM.ASM(g, GLCM.CountPair(part.GetLength(0), part.GetLength(1), GLCM.GLCMType.Diagonal));
+                }
+
+            float min = resimagef[0, 0];
+            float max = resimagef[0, 0];
+
+            for (int i = 0; i < resimagef.GetLength(0); i++)
+                for (int j = 0; j < resimagef.GetLength(1); j++)
+                {
+                    if (resimagef[i, j] > max) max = resimagef[i, j];
+                    if (resimagef[i, j] < min) min = resimagef[i, j];
+                }
+
+            for (int i = 0; i < resimagef.GetLength(0); i++)
+                for (int j = 0; j < resimagef.GetLength(1); j++)
+                {
+                    int intensivity = (int)((resimagef[i, j] - min) * 255 / (max - min));
+                    resimage.SetPixel(i, j, Color.FromArgb(intensivity, intensivity, intensivity));
+                }
+
+            pictureBox3.Image = resimage;
+        }
+
+        private void контрастToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int Radius = 3;
+            Bitmap startimage = Tools.Gray(new Bitmap(pictureBox1.Image));
+            int[,] image = Tools.IntensivityMatrix(startimage);
+
+            float[,] resimagef = new float[image.GetLength(0), image.GetLength(1)];
+
+            Bitmap resimage = new Bitmap(startimage);
+
+            for (uint i = 0; i < resimagef.GetLength(0); i++)
+                for (uint j = 0; j < resimagef.GetLength(1); j++)
+                {
+                    int[,] part = Tools.MatrixPart(image, (uint)Radius, i, j);
+                    int[,] g = GLCM.DiagonalGLCM(part);
+                    resimagef[i, j] = GLCM.Contrast(g, GLCM.CountPair(part.GetLength(0), part.GetLength(1), GLCM.GLCMType.Diagonal));
+                }
+
+            float min = resimagef[0, 0];
+            float max = resimagef[0, 0];
+
+            for (int i = 0; i < resimagef.GetLength(0); i++)
+                for (int j = 0; j < resimagef.GetLength(1); j++)
+                {
+                    if (resimagef[i, j] > max) max = resimagef[i, j];
+                    if (resimagef[i, j] < min) min = resimagef[i, j];
+                }
+
+            for (int i = 0; i < resimagef.GetLength(0); i++)
+                for (int j = 0; j < resimagef.GetLength(1); j++)
+                {
+                    int intensivity = (int)((resimagef[i, j] - min) * 255 / (max - min));
+                    resimage.SetPixel(i, j, Color.FromArgb(intensivity, intensivity, intensivity));
+                }
+
+            pictureBox3.Image = resimage;
         }
 
         public int clamp(int value, int min, int max) { return value < min ? min : value > max ? max : value; }

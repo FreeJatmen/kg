@@ -48,10 +48,16 @@
             this.expToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.whiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lawsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.pSNRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.кореляцияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.контрастToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -77,7 +83,10 @@
             this.comparisonToolStripMenuItem1,
             this.binarizatsiyaToolStripMenuItem,
             this.lab3ToolStripMenuItem,
-            this.gistToolStripMenuItem});
+            this.gistToolStripMenuItem,
+            this.lawsToolStripMenuItem,
+            this.rToolStripMenuItem,
+            this.gLCToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
@@ -219,9 +228,33 @@
             // gistToolStripMenuItem
             // 
             this.gistToolStripMenuItem.Name = "gistToolStripMenuItem";
-            this.gistToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.gistToolStripMenuItem.Text = "Gist";
+            this.gistToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.gistToolStripMenuItem.Text = "Hist";
             this.gistToolStripMenuItem.Click += new System.EventHandler(this.gistToolStripMenuItem_Click);
+            // 
+            // lawsToolStripMenuItem
+            // 
+            this.lawsToolStripMenuItem.Name = "lawsToolStripMenuItem";
+            this.lawsToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
+            this.lawsToolStripMenuItem.Text = "Laws";
+            this.lawsToolStripMenuItem.Click += new System.EventHandler(this.lawsToolStripMenuItem_Click);
+            // 
+            // rToolStripMenuItem
+            // 
+            this.rToolStripMenuItem.Name = "rToolStripMenuItem";
+            this.rToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.rToolStripMenuItem.Text = "Region";
+            this.rToolStripMenuItem.Click += new System.EventHandler(this.rToolStripMenuItem_Click);
+            // 
+            // gLCToolStripMenuItem
+            // 
+            this.gLCToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.кореляцияToolStripMenuItem,
+            this.aSMToolStripMenuItem,
+            this.контрастToolStripMenuItem});
+            this.gLCToolStripMenuItem.Name = "gLCToolStripMenuItem";
+            this.gLCToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.gLCToolStripMenuItem.Text = "GLCM";
             // 
             // backgroundWorker1
             // 
@@ -249,6 +282,27 @@
             this.pictureBox2.Size = new System.Drawing.Size(311, 327);
             this.pictureBox2.TabIndex = 19;
             this.pictureBox2.TabStop = false;
+            // 
+            // кореляцияToolStripMenuItem
+            // 
+            this.кореляцияToolStripMenuItem.Name = "кореляцияToolStripMenuItem";
+            this.кореляцияToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.кореляцияToolStripMenuItem.Text = "Корреляция";
+            this.кореляцияToolStripMenuItem.Click += new System.EventHandler(this.кореляцияToolStripMenuItem_Click);
+            // 
+            // aSMToolStripMenuItem
+            // 
+            this.aSMToolStripMenuItem.Name = "aSMToolStripMenuItem";
+            this.aSMToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aSMToolStripMenuItem.Text = "ASM";
+            this.aSMToolStripMenuItem.Click += new System.EventHandler(this.aSMToolStripMenuItem_Click);
+            // 
+            // контрастToolStripMenuItem
+            // 
+            this.контрастToolStripMenuItem.Name = "контрастToolStripMenuItem";
+            this.контрастToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.контрастToolStripMenuItem.Text = "Контраст";
+            this.контрастToolStripMenuItem.Click += new System.EventHandler(this.контрастToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -299,6 +353,12 @@
         private System.Windows.Forms.ToolStripMenuItem whiteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gistToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.ToolStripMenuItem lawsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gLCToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem кореляцияToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aSMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem контрастToolStripMenuItem;
     }
 }
 
