@@ -68,10 +68,5 @@ namespace Lab1_kg_
             return (sum / ((float)(im1.Height * im1.Width) - 1f) * 3);
         }
 
-
-        private static float GetBrightness(Color color)
-        {
-            return (byte)(.299 * color.R + .587 * color.G + .114 * color.B);
-        }
     }
 }

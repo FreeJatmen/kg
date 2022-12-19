@@ -24,15 +24,6 @@ namespace Lab1_kg_
                     if (x < min) min = x;
                     imageC.SetPixel(i, j, Color.FromArgb(x, x, x));   // To grey
                 }
-            /*
-            for (int i = 0; i < Image.Width; i++)
-                for (int j = 0; j < Image.Height; j++)
-                {
-                    int intensivity = imageC.GetPixel(i, j).R;
-                    intensivity = (int) ((intensivity - min) * 255 / (max - min));
-                    imageC.SetPixel(i, j, Color.FromArgb(intensivity, intensivity, intensivity)); //linear stretch
-                }*/
-
             return imageC;
         }
 

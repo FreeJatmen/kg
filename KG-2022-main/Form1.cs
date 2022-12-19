@@ -278,79 +278,16 @@ namespace Lab1_kg_
         //exp
         private void expToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            int w = image.Width;
-            int h = image.Height;
-
-            BitmapData image_data = image.LockBits(
-                new Rectangle(0, 0, w, h),
-                ImageLockMode.ReadOnly,
-                PixelFormat.Format24bppRgb);
-            int bytes = image_data.Stride * image_data.Height;
-            byte[] buffer = new byte[bytes];
-            byte[] result = new byte[bytes];
-            Marshal.Copy(image_data.Scan0, buffer, 0, bytes);
-            image.UnlockBits(image_data);
-
-            byte[] noise = new byte[bytes];
-            double[] erlang = new double[256];
-            double a = 1;
-            Random rnd = new Random();
-            double sum = 0;
-
-            for (int i = 0; i < 256; i++)
-            {
-                double step = (double)i * 0.009;
-                if (step >= 0)
+            Bitmap res = new Bitmap(pictureBox1.Image);
+            Random rand = new Random();
+            for (int i = 0; i < res.Width; i++)
+                for (int j = 0; j < res.Height; j++)
                 {
-                    erlang[i] = (double)(a * Math.Exp(-a * step));
+                    Color sourceCol = res.GetPixel(i, j);
+                    res.SetPixel(i, j, Color.FromArgb(Slice((int)(sourceCol.R + Math.Log10(1 - rand.NextDouble()) * 255), 0, 255), Slice((int)(sourceCol.G + Math.Log(1 - rand.NextDouble()) * 255), 0, 255), Slice((int)(sourceCol.B + Math.Log(1 - rand.NextDouble()) * 255), 0, 255)));
                 }
-                else
-                {
-                    erlang[i] = 0;
-                }
-                sum += erlang[i];
-            }
-
-            for (int i = 0; i < 256; i++)
-            {
-                erlang[i] /= sum;
-                erlang[i] *= bytes;
-                erlang[i] = (int)Math.Floor(erlang[i]);
-            }
-
-            int count = 0;
-            for (int i = 0; i < 256; i++)
-            {
-                for (int j = 0; j < (int)erlang[i]; j++)
-                {
-                    noise[j + count] = (byte)i;
-                }
-                count += (int)erlang[i];
-            }
-
-            for (int i = 0; i < bytes - count; i++)
-            {
-                noise[count + i] = 0;
-            }
-
-            noise = noise.OrderBy(x => rnd.Next()).ToArray();
-
-            for (int i = 0; i < bytes; i++)
-            {
-                result[i] = (byte)(buffer[i] + noise[i]);
-            }
-
-            Bitmap result_image = new Bitmap(w, h);
-            BitmapData result_data = result_image.LockBits(
-                new Rectangle(0, 0, w, h),
-                ImageLockMode.WriteOnly,
-                PixelFormat.Format24bppRgb);
-            Marshal.Copy(result, 0, result_data.Scan0, bytes);
-            result_image.UnlockBits(result_data);
-
-
             prevImage = image;
-            image = result_image;
+            image = res;
             pictureBox1.Image = image;
             pictureBox1.Refresh();
             pictureBox3.Image = prevImage;
