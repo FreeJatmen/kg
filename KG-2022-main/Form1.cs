@@ -21,24 +21,21 @@ namespace Lab1_kg_
 
         private void grayToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             Bitmap bt = new Bitmap(pictureBox1.Image);
-            {
-                for (int y = 0; y < image.Height; y++)
-                    for (int x = 0; x < image.Width; x++)
-                    {
-                        Color c = bt.GetPixel(x, y);
+          
+            for (int y = 0; y < image.Height; y++)
+                for (int x = 0; x < image.Width; x++)
+                {
+                    Color c = bt.GetPixel(x, y);
 
-                        int r = c.R;
-                        int g = c.G;
-                        int b = c.B;
+                    int r = c.R;
+                    int g = c.G;
+                    int b = c.B;
 
-                        int avg = (r + g + b) / 3;
-                        bt.SetPixel(x, y, Color.FromArgb(avg, avg, avg));
-                    }
-                pictureBox1.Image = bt;
-
-            }
+                    int avg = (r + g + b) / 3;
+                    bt.SetPixel(x, y, Color.FromArgb(avg, avg, avg));
+                }
+            pictureBox1.Image = bt;
         }
 
 
@@ -218,11 +215,12 @@ namespace Lab1_kg_
 
         #endregion
 
+        
         //nonlocal
         private void nonlocalToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Bitmap image2 = new Bitmap(pictureBox1.Image);
-
+            
             int[,] arrR = new int[image2.Width, image2.Height];
             int[,] arrG = new int[image2.Width, image2.Height];
             int[,] arrB = new int[image2.Width, image2.Height];
@@ -280,12 +278,14 @@ namespace Lab1_kg_
         {
             Bitmap res = new Bitmap(pictureBox1.Image);
             Random rand = new Random();
+
             for (int i = 0; i < res.Width; i++)
                 for (int j = 0; j < res.Height; j++)
                 {
                     Color sourceCol = res.GetPixel(i, j);
                     res.SetPixel(i, j, Color.FromArgb(Slice((int)(sourceCol.R + Math.Log10(1 - rand.NextDouble()) * 255), 0, 255), Slice((int)(sourceCol.G + Math.Log(1 - rand.NextDouble()) * 255), 0, 255), Slice((int)(sourceCol.B + Math.Log(1 - rand.NextDouble()) * 255), 0, 255)));
                 }
+            
             prevImage = image;
             image = res;
             pictureBox1.Image = image;
@@ -329,16 +329,16 @@ namespace Lab1_kg_
         private void whiteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Bitmap res = (Bitmap)image.Clone();
-            var rnd = new Random();
+            Random coordRand = new Random();
+            int countNoise = (int)((image.Width * image.Height)/10);
+            for(int i = 0; i < countNoise; i++)
+            {
+             
+                 int x = coordRand.Next(0, image.Width);
+                 int y = coordRand.Next(0, image.Height);
+                res.SetPixel(x, y, Color.White);
 
-            for (int x = 0; x < image.Width; x++)
-                for (int y = 0; y < image.Height; y++)
-                {
-                    Color color = res.GetPixel(x, y);
-                    int q = rnd.Next(100);
-                    if (q < 25) res.SetPixel(x, y, Color.White);
-                }
-
+            }
             prevImage = image;
             image = res;
             pictureBox1.Image = image;
